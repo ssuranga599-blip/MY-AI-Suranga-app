@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>මගේ AI වීඩියෝ ඇප් එක</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f0f2f5; }
+        .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+        input { width: 80%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #status { margin-top: 20px; font-weight: bold; color: #555; }
+        video { width: 100%; margin-top: 20px; border-radius: 10px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>AI වීඩියෝ සාදන්නා 🎬</h2>
+    <p>ඔයාට ඕන වීඩියෝව ගැන විස්තරයක් මෙතැන ලියන්න:</p>
+    <input type="text" id="userPrompt" placeholder="උදා: A cat dancing in the rain...">
+    <br>
+    <button onclick="generateVideo()">වීඩියෝව සාදන්න 🚀</button>
+    <div id="status"></div>
+    <video id="videoPlayer" controls></video>
+</div>
+
+<script>
+    // Hugging Face එක හරි ගියාම මෙතැනට Token එක දාන්න
+    const apiKey = "YOUR_ACTUAL_TOKEN_HERE"; 
+
+    async function generateVideo() {
+        const prompt = document.getElementById("userPrompt").value;
+        const status = document.getElementById("status");
+        const video = document.getElementById("videoPlayer");
+
+        if(!prompt) { alert("කරුණාකර විස්තරයක් ඇතුළත් කරන්න!"); return; }
+
+        status.innerText = "වීඩියෝව සැකසෙමින් පවතී... ⏳ (විනාඩියක් පමණ ගතවිය හැක)";
+        video.style.display = "none";
+
+        try {
+            // මෙතැනදී අපි Hugging Face API එකට සම්බන්ධ වෙනවා
+            status.innerText = "AI මොළය වැඩ කරයි... 🧠";
+            // (ඉදිරි පියවරේදී අපි API එක ක්‍රියාත්මක කරමු)
+        } catch (error) {
+            status.innerText = "වැරදීමක් සිදුවුණා! ❌";
+        }
+    }
+</script>
+
+</body>
+</html>
