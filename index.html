@@ -3,41 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI පින්තූර සාදන්නා 🎨</title>
+    <title>AI වීඩියෝ සාදන්නා 🎬</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; }
-        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
         input { width: 90%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; }
-        button { padding: 12px 25px; background-color: #0056b3; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
+        button { padding: 12px 25px; background-color: #e63946; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
         #status { margin-top: 20px; font-weight: bold; color: #555; }
-        #outputImage { width: 100%; margin-top: 20px; border-radius: 10px; display: none; }
+        video { width: 100%; margin-top: 20px; border-radius: 10px; display: none; border: 2px solid #ddd; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h2>AI පින්තූර සාදන්නා 🎨</h2>
+    <h2>AI වීඩියෝ සාදන්නා 🎬</h2>
     <input type="password" id="hfToken" placeholder="ඔයාගේ Token එක මෙතනට දාන්න">
-    <input type="text" id="userPrompt" placeholder="මොකක්ද හදන්න ඕනේ? (උදා: cat)">
-    <button onclick="generateImage()">පින්තූරය සාදන්න 🚀</button>
+    <input type="text" id="userPrompt" placeholder="මොන වගේ වීඩියෝ එකක්ද ඕනේ? (උදා: A dog running)">
+    <button onclick="generateVideo()">වීඩියෝව සාදන්න 🚀</button>
     <div id="status"></div>
-    <img id="outputImage">
+    <video id="videoPlayer" controls></video>
 </div>
 
 <script>
-    async function generateImage() {
+    async function generateVideo() {
         const token = document.getElementById('hfToken').value.trim();
         const prompt = document.getElementById('userPrompt').value.trim();
         const status = document.getElementById('status');
-        const img = document.getElementById('outputImage');
+        const video = document.getElementById('videoPlayer');
 
         if (!token || !prompt) { alert("Token එක සහ විස්තරය දාන්න!"); return; }
 
-        status.innerText = "AI මොළය වැඩ කරයි... විනාඩියක් විතර ඉන්න ⏳";
-        img.style.display = "none";
+        status.innerText = "වීඩියෝව සකසමින් පවතී... විනාඩි 1-2ක් යන්න පුළුවන් ⏳";
+        video.style.display = "none";
 
         try {
             const response = await fetch(
-                "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
+                "https://api-inference.huggingface.co/models/ByteDance/AnimateDiff-Lightning", 
                 {
                     headers: { "Authorization": `Bearer ${token}` },
                     method: "POST",
@@ -47,16 +47,20 @@
 
             if (response.ok) {
                 const blob = await response.blob();
-                img.src = URL.createObjectURL(blob);
-                img.style.display = "block";
-                status.innerText = "වැඩේ හරි! ✅";
+                video.src = URL.createObjectURL(blob);
+                video.style.display = "block";
+                status.innerText = "සාර්ථකයි! වීඩියෝව පහතින් බලන්න 👇";
+            } else if (response.status === 503) {
+                status.innerText = "සර්වර් එක ලෝඩ් වෙනවා. තත්පර 20කින් ආයෙත් උත්සාහ කරන්න. ⏳";
             } else {
-                status.innerText = "සර්වර් එකේ ගැටලුවක්. ටිකකින් ආයෙත් ට්‍රයි කරන්න.";
+                status.innerText = "Error: සර්වර් එකේ ගැටලුවක්. (Status: " + response.status + ")";
             }
         } catch (e) {
-            status.innerText = "Error: සම්බන්ධතාවය බිඳ වැටුණා. ටෝකන් එක නිවැරදිද බලන්න.";
+            status.innerText = "Error: සම්බන්ධතාවය බිඳ වැටුණා. ටෝකන් එක හරියටම පේස්ට් කළාද බලන්න.";
         }
     }
 </script>
 </body>
 </html>
+
+ 
