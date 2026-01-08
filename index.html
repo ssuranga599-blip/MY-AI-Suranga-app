@@ -30,29 +30,49 @@
 </div>
 
 <script>
-    // Hugging Face එක හරි ගියාම මෙතැනට Token එක දාන්න
-    const apiKey = document.getElementById('hfToken').value;
-
-
+ <script>
     async function generateVideo() {
-        const prompt = document.getElementById("userPrompt").value;
-        const status = document.getElementById("status");
-        const video = document.getElementById("videoPlayer");
+        const token = document.getElementById('hfToken').value.trim();
+        const prompt = document.getElementById('userPrompt').value.trim();
+        const status = document.getElementById('status');
+        const video = document.getElementById('videoPlayer');
 
-        if(!prompt) { alert("කරුණාකර විස්තරයක් ඇතුළත් කරන්න!"); return; }
+        if (!token || !prompt) {
+            alert("කරුණාකර Token එක සහ විස්තරය ඇතුළත් කරන්න!");
+            return;
+        }
 
-        status.innerText = "වීඩියෝව සැකසෙමින් පවතී... ⏳ (විනාඩියක් පමණ ගතවිය හැක)";
+        status.innerText = "වීඩියෝව සකසමින් පවතී... විනාඩියක් පමණ රැඳී සිටින්න ⏳";
         video.style.display = "none";
 
         try {
-            // මෙතැනදී අපි Hugging Face API එකට සම්බන්ධ වෙනවා
-            status.innerText = "AI මොළය වැඩ කරයි... 🧠";
-            // (ඉදිරි පියවරේදී අපි API එක ක්‍රියාත්මක කරමු)
+            const response = await fetch(
+                "https://api-inference.huggingface.co/models/strangerzonehf/MagicVideo-V2",
+                {
+                    headers: { 
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    method: "POST",
+                    body: JSON.stringify({ inputs: prompt }),
+                }
+            );
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const videoUrl = URL.createObjectURL(blob);
+                video.src = videoUrl;
+                video.style.display = "block";
+                status.innerText = "වැඩේ හරි! වීඩියෝව ප්ලේ කර බලන්න 👇";
+            } else {
+                const errorData = await response.json();
+                status.innerText = "අයියෝ! " + (errorData.error || "සර්වර් එකේ ගැටලුවක්.");
+            }
         } catch (error) {
-            status.innerText = "වැරදීමක් සිදුවුණා! ❌";
+            status.innerText = "Error: " + error.message;
         }
     }
 </script>
-
 </body>
 </html>
+
