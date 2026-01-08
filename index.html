@@ -1,30 +1,29 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="si">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>මගේ AI වීඩියෝ ඇප් එක 🎬</title>
+    <title>AI පින්තූර සාදන්නා 🎨</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; }
-        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
-        input { width: 90%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
-        button:hover { background-color: #0056b3; }
-        #status { margin-top: 20px; font-weight: bold; color: #555; }
-        #outputImage { width: 100%; margin-top: 20px; border-radius: 10px; display: none; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
+        input { width: 90%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+        button { padding: 12px 25px; background-color: #0056b3; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
+        button:hover { background-color: #004494; }
+        #status { margin-top: 20px; font-weight: bold; color: #555; font-size: 14px; line-height: 1.5; }
+        #outputImage { width: 100%; margin-top: 20px; border-radius: 10px; display: none; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>AI පින්තූර සාදන්නා 🎨</h2>
-    <p>ඔයාගේ Hugging Face Token එක මෙතනට දාන්න:</p>
+    <p>ඔයාගේ Hugging Face Token එක දාන්න:</p>
     <input type="password" id="hfToken" placeholder="hf_...">
     
     <p>ඔයාට ඕන පින්තූරය ගැන ලියන්න:</p>
-    <input type="text" id="userPrompt" placeholder="උදා: A beautiful garden">
+    <input type="text" id="userPrompt" placeholder="උදා: ලස්සන පූසෙක්">
     
-    <br>
     <button onclick="generateImage()">පින්තූරය සාදන්න 🚀</button>
     
     <div id="status"></div>
@@ -67,13 +66,14 @@
                 status.innerText = "වැඩේ හරි! මෙන්න ඔයාගේ පින්තූරය 👇";
             } else {
                 const errorData = await response.json();
-                status.innerText = "Error: " + (errorData.error || "ටෝකන් එකේ අවුලක්!");
+                status.innerText = "අයියෝ! " + (errorData.error || "ටෝකන් එකේ අවුලක්.");
             }
         } catch (error) {
-            status.innerText = "Error: Failed to fetch. ඉන්ටර්නෙට් චෙක් කරන්න.";
+            status.innerText = "Error: Failed to fetch. \nඉන්ටර්නෙට් චෙක් කරන්න නැත්නම් Token එක ආයෙත් දාන්න.";
         }
     }
 </script>
 
 </body>
 </html>
+
