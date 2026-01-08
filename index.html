@@ -3,50 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>මගේ AI වීඩියෝ ඇප් එක</title>
+    <title>මගේ AI වීඩියෝ ඇප් එක 🎬</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #f0f2f5; }
-        .container { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
-        input { width: 80%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
+        input { width: 90%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #0056b3; }
         #status { margin-top: 20px; font-weight: bold; color: #555; }
-        video { width: 100%; margin-top: 20px; border-radius: 10px; display: none; }
+        #outputImage { width: 100%; margin-top: 20px; border-radius: 10px; display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>AI වීඩියෝ සාදන්නා 🎬</h2>
-    <p>ඔයාට ඕන වීඩියෝව ගැන විස්තරයක් මෙතැන ලියන්න:</p>
-    <input type="password" id="hfToken" placeholder="Hugging Face Token එක මෙතන දාන්න">
-<br><br>
-<input type="text" id="userPrompt" placeholder="ඔයාට ඕන වීඩියෝව ගැන මෙතන ලියන්න">
-
-
+    <h2>AI පින්තූර සාදන්නා 🎨</h2>
+    <p>ඔයාගේ Hugging Face Token එක මෙතනට දාන්න:</p>
+    <input type="password" id="hfToken" placeholder="hf_...">
+    
+    <p>ඔයාට ඕන පින්තූරය ගැන ලියන්න:</p>
+    <input type="text" id="userPrompt" placeholder="උදා: A beautiful garden">
+    
     <br>
-    <button onclick="generateVideo()">වීඩියෝව සාදන්න 🚀</button>
+    <button onclick="generateImage()">පින්තූරය සාදන්න 🚀</button>
+    
     <div id="status"></div>
-    <video id="videoPlayer" controls></video>
+    <img id="outputImage" alt="AI Generated Image">
 </div>
 
- <script>
-    async function generateVideo() {
+<script>
+    async function generateImage() {
         const token = document.getElementById('hfToken').value.trim();
         const prompt = document.getElementById('userPrompt').value.trim();
         const status = document.getElementById('status');
-        const video = document.getElementById('videoPlayer');
+        const img = document.getElementById('outputImage');
 
         if (!token || !prompt) {
             alert("කරුණාකර Token එක සහ විස්තරය ඇතුළත් කරන්න!");
             return;
         }
 
-        status.innerText = "වීඩියෝව සකසමින් පවතී... විනාඩි 1-2ක් යන්න පුළුවන් ⏳";
-        video.style.display = "none";
+        status.innerText = "AI මොළය වැඩ කරයි... පොඩ්ඩක් ඉන්න ⏳";
+        img.style.display = "none";
 
         try {
             const response = await fetch(
-                "https://api-inference.huggingface.co/models/strangerzonehf/MagicVideo-V2",
+                "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
                 {
                     headers: { 
                         "Authorization": `Bearer ${token}`,
@@ -59,21 +61,19 @@
 
             if (response.ok) {
                 const blob = await response.blob();
-                const videoUrl = URL.createObjectURL(blob);
-                video.src = videoUrl;
-                video.style.display = "block";
-                status.innerText = "වැඩේ හරි! වීඩියෝව ප්ලේ කර බලන්න 👇";
+                const imageUrl = URL.createObjectURL(blob);
+                img.src = imageUrl;
+                img.style.display = "block";
+                status.innerText = "වැඩේ හරි! මෙන්න ඔයාගේ පින්තූරය 👇";
             } else {
                 const errorData = await response.json();
-                status.innerText = "අයියෝ! " + (errorData.error || "සර්වර් එකේ ගැටලුවක්.");
+                status.innerText = "Error: " + (errorData.error || "ටෝකන් එකේ අවුලක්!");
             }
         } catch (error) {
-            status.innerText = "Error: " + error.message;
+            status.innerText = "Error: Failed to fetch. ඉන්ටර්නෙට් චෙක් කරන්න.";
         }
     }
 </script>
+
 </body>
 </html>
-
-
-
